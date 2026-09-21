@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <th:block th:replace="~{fragments/layout :: headBase('Eventos')}"></th:block>
+    <style>
+        .card {
+            background-color: var(--ctp-mocha-mantle);
+            border: 1px solid var(--ctp-mocha-surface0);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            border-color: var(--ctp-mocha-blue);
+        }
+        
+        .card-title {
+            color: var(--ctp-mocha-lavender);
+            font-weight: 600;
+        }
+        
+        .card-text {
+            color: var(--ctp-mocha-subtext1);
+        }
+        
+        .text-muted {
+            color: var(--ctp-mocha-overlay1) !important;
+        }
+        
+        .btn-primary {
+            background-color: var(--ctp-mocha-mauve);
+            border: none;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--ctp-mocha-lavender);
+            transform: translateY(-2px);
+        }
+        
+        .alert-success {
+            background-color: var(--ctp-mocha-green);
+            color: var(--ctp-mocha-base);
+            border: none;
+            border-radius: 8px;
+        }
+        
+        @media (max-width: 768px) {
+            .card {
+                margin-bottom: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav th:replace="~{fragments/navbar :: user}"></nav>
+
+    <div class="container">
+        <h2 class="app-title">Eventos Disponibles</h2>
+        <div th:if="${param.bienvenida != null and currentUser != null}" class="alert alert-success">
+            ¡Bienvenido, <span th:text="${currentUser.nombre}"></span>! Iniciaste sesión correctamente.
+        </div>
+        <div th:if="${param.compra_exitosa}" class="alert alert-success">
+            Compra realizada con éxito!
+        </div>
+
+        <div class="row">
+            <div th:each="evento : ${eventos}" class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title" th:text="${evento.nombre}"></h5>
+                        <p class="card-text" th:text="${evento.descripcion}"></p>
+                        <p class="card-text"><small class="text-muted" th:text="${evento.fecha}"></small></p>
+                        <p class="card-text">Boletos disponibles: <span th:text="${evento.boletosDisponibles}"></span></p>
+                        <a th:href="@{/eventos/{id}(id=${evento.id})}" class="btn btn-primary">Ver detalles</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <th:block th:replace="~{fragments/layout :: scriptsBase}"></th:block>
+</body>
+</html>

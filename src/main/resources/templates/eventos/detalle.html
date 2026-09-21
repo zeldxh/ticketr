@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <th:block th:replace="~{fragments/layout :: headBase(${evento.nombre})}"></th:block>
+    <style>
+        .card {
+            background-color: var(--ctp-mocha-mantle);
+            border: 1px solid var(--ctp-mocha-surface0);
+            border-radius: 12px;
+        }
+        
+        .card-title {
+            color: var(--ctp-mocha-lavender);
+            font-size: 1.75rem;
+            margin-bottom: 1rem;
+        }
+        
+        .card-text {
+            color: var(--ctp-mocha-subtext1);
+            margin-bottom: 0.5rem;
+        }
+        
+        strong {
+            color: var(--ctp-mocha-subtext0);
+        }
+        
+        .alert-danger {
+            background-color: var(--ctp-mocha-red);
+            color: var(--ctp-mocha-base);
+            border: none;
+            border-radius: 8px;
+        }
+        
+    </style>
+</head>
+<body>
+    <nav th:replace="~{fragments/navbar :: user}"></nav>
+
+    <div class="container">
+        <div th:if="${param.error}" class="alert alert-danger">
+            No hay suficientes boletos disponibles!
+        </div>
+        
+        <div class="card">
+            <div class="card-body">
+                <h2 class="card-title" th:text="${evento.nombre}"></h2>
+                <p class="card-text" th:text="${evento.descripcion}"></p>
+                <p class="card-text"><strong>Lugar:</strong> <span th:text="${evento.lugar}"></span></p>
+                <p class="card-text"><strong>Fecha:</strong> <span th:text="${evento.fecha}"></span></p>
+                <p class="card-text">
+                    <strong th:text="${'Precio por boleto (' + @currencyHelper.primaryCode() + '):'}"></strong>
+                    <span th:text="${@currencyHelper.primarySymbol() + ' ' + #numbers.formatDecimal(evento.precio, 1, 2)}"></span>
+                    <small class="text-muted d-block"
+                           th:text="${'Equivalente en ' + @currencyHelper.secondaryCode() + ': ' + @currencyHelper.secondarySymbol() + ' ' + #numbers.formatDecimal(@currencyHelper.secondaryAmount(evento.precio), 1, 2)}"></small>
+                </p>
+                <p class="card-text"><strong>Boletos disponibles:</strong> <span th:text="${evento.boletosDisponibles}"></span></p>
+                
+                <form th:action="@{/eventos/comprar/{id}(id=${evento.id})}" method="post" class="mt-4">
+                    <div class="mb-3">
+                        <label for="cantidad" class="form-label app-label">Cantidad de boletos:</label>
+                        <input type="number" class="form-control app-input app-placeholder" id="cantidad" name="cantidad" min="1" th:max="${evento.boletosDisponibles}" required>
+                    </div>
+                    <button type="submit" class="btn app-btn-primary">Comprar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <th:block th:replace="~{fragments/layout :: scriptsBase}"></th:block>
+</body>
+</html>
