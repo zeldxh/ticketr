@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <th:block th:replace="~{fragments/layout :: headBase('Mi Perfil')}"></th:block>
+    <style>
+        .profile-card {
+            background-color: var(--ctp-mocha-mantle);
+            border: 1px solid var(--ctp-mocha-surface0);
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+
+        .profile-avatar {
+            width: 84px;
+            height: 84px;
+            border-radius: 999px;
+            border: 2px solid var(--ctp-mocha-surface1);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+            color: var(--ctp-mocha-peach);
+            background-color: var(--ctp-mocha-surface0);
+        }
+
+        .profile-label {
+            color: var(--ctp-mocha-subtext1);
+            margin-bottom: 0.2rem;
+            font-size: 0.9rem;
+        }
+
+        .profile-value {
+            font-size: 1.05rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <nav sec:authorize="!hasRole('ADMIN')" th:replace="~{fragments/navbar :: user}"></nav>
+    <nav sec:authorize="hasRole('ADMIN')" th:replace="~{fragments/navbar :: admin}"></nav>
+
+    <div class="container">
+        <h2 class="app-title">Mi Perfil</h2>
+        <div class="profile-card">
+            <div class="profile-avatar" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" class="app-avatar-icon-lg" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+                    <path d="M14 14s-1-4-6-4-6 4-6 4 1 1 6 1 6-1 6-1z"/>
+                </svg>
+            </div>
+
+            <div class="profile-label">Nombre</div>
+            <div class="profile-value" th:text="${currentUser != null ? currentUser.nombre : '-'}"></div>
+
+            <div class="profile-label">Correo</div>
+            <div class="profile-value" th:text="${currentUser != null ? currentUser.email : '-'}"></div>
+
+            <div class="profile-label">Rol</div>
+            <div class="profile-value" th:text="${currentUser != null ? currentUser.rol : '-'}"></div>
+        </div>
+    </div>
+
+    <th:block th:replace="~{fragments/layout :: scriptsBase}"></th:block>
+</body>
+</html>
