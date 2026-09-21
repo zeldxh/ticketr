@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${usuario.id == null ? 'Nuevo Usuario' : 'Editar Usuario'}">Formulario de Usuario</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --ctp-mocha-rosewater: #f5e0dc;
+            --ctp-mocha-flamingo: #f2cdcd;
+            --ctp-mocha-pink: #f5c2e7;
+            --ctp-mocha-mauve: #cba6f7;
+            --ctp-mocha-red: #f38ba8;
+            --ctp-mocha-maroon: #eba0ac;
+            --ctp-mocha-peach: #fab387;
+            --ctp-mocha-yellow: #f9e2af;
+            --ctp-mocha-green: #a6e3a1;
+            --ctp-mocha-teal: #94e2d5;
+            --ctp-mocha-sky: #89dceb;
+            --ctp-mocha-sapphire: #74c7ec;
+            --ctp-mocha-blue: #89b4fa;
+            --ctp-mocha-lavender: #b4befe;
+            --ctp-mocha-text: #cdd6f4;
+            --ctp-mocha-subtext1: #bac2de;
+            --ctp-mocha-subtext0: #a6adc8;
+            --ctp-mocha-overlay2: #9399b2;
+            --ctp-mocha-overlay1: #7f849c;
+            --ctp-mocha-overlay0: #6c7086;
+            --ctp-mocha-surface2: #585b70;
+            --ctp-mocha-surface1: #45475a;
+            --ctp-mocha-surface0: #313244;
+            --ctp-mocha-base: #1e1e2e;
+            --ctp-mocha-mantle: #181825;
+            --ctp-mocha-crust: #11111b;
+        }
+        
+        body {
+            background-color: var(--ctp-mocha-base);
+            color: var(--ctp-mocha-text);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            min-height: 100vh;
+        }
+        
+        .navbar {
+            background-color: var(--ctp-mocha-crust) !important;
+            border-bottom: 1px solid var(--ctp-mocha-surface0);
+        }
+        
+        .navbar-brand, .nav-link {
+            color: var(--ctp-mocha-lavender) !important;
+        }
+        
+        .nav-link.active {
+            color: var(--ctp-mocha-blue) !important;
+            font-weight: 500;
+            position: relative;
+        }
+        
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background-color: var(--ctp-mocha-blue);
+            border-radius: 2px;
+        }
+        
+        .btn-outline-light {
+            color: var(--ctp-mocha-lavender);
+            border-color: var(--ctp-mocha-surface1);
+        }
+        
+        .btn-outline-light:hover {
+            background-color: var(--ctp-mocha-surface0);
+            color: var(--ctp-mocha-text);
+        }
+        
+        .container {
+            padding-top: 2rem;
+            padding-bottom: 2rem;
+        }
+        
+        h2 {
+            color: var(--ctp-mocha-blue);
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+        }
+        
+        .form-card {
+            background-color: var(--ctp-mocha-mantle);
+            border-radius: 12px;
+            padding: 2rem;
+            border: 1px solid var(--ctp-mocha-surface0);
+        }
+        
+        .form-label {
+            color: var(--ctp-mocha-lavender);
+            font-weight: 500;
+        }
+        
+        .form-control {
+            background-color: var(--ctp-mocha-surface0);
+            border: 1px solid var(--ctp-mocha-surface1);
+            color: var(--ctp-mocha-text);
+        }
+        
+        .form-control:focus {
+            background-color: var(--ctp-mocha-surface0);
+            border-color: var(--ctp-mocha-blue);
+            color: var(--ctp-mocha-text);
+            box-shadow: 0 0 0 0.25rem rgba(137, 180, 250, 0.25);
+        }
+        
+        .form-select {
+            background-color: var(--ctp-mocha-surface0);
+            border: 1px solid var(--ctp-mocha-surface1);
+            color: var(--ctp-mocha-text);
+        }
+        
+        .form-select:focus {
+            background-color: var(--ctp-mocha-surface0);
+            border-color: var(--ctp-mocha-blue);
+            color: var(--ctp-mocha-text);
+            box-shadow: 0 0 0 0.25rem rgba(137, 180, 250, 0.25);
+        }
+        
+        .btn-primary {
+            background-color: var(--ctp-mocha-blue);
+            border-color: var(--ctp-mocha-blue);
+            color: var(--ctp-mocha-base);
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--ctp-mocha-sapphire);
+            border-color: var(--ctp-mocha-sapphire);
+        }
+        
+        .btn-secondary {
+            background-color: var(--ctp-mocha-surface1);
+            border-color: var(--ctp-mocha-surface1);
+            color: var(--ctp-mocha-text);
+        }
+        
+        .btn-secondary:hover {
+            background-color: var(--ctp-mocha-surface2);
+            border-color: var(--ctp-mocha-surface2);
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">Admin Panel</a>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/eventos}">Ver Eventos Públicos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/admin/eventos}">Gestionar Eventos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" th:href="@{/admin/usuarios}">Gestionar Usuarios</a>
+                    </li>
+                </ul>
+                <form th:action="@{/logout}" method="post" class="d-flex">
+                    <button class="btn btn-outline-light" type="submit">Cerrar Sesión</button>
+                </form>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="form-card">
+                    <h2 th:text="${usuario.id == null ? 'Nuevo Usuario' : 'Editar Usuario'}">Formulario de Usuario</h2>
+                    
+                    <form th:action="@{/admin/usuarios/guardar}" method="post" th:object="${usuario}">
+                        <input type="hidden" th:field="*{id}">
+                        
+                        <div class="mb-3">
+                            <label for="nombre" class="form-label">Nombre</label>
+                            <input type="text" class="form-control" id="nombre" th:field="*{nombre}" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" th:field="*{email}" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Contraseña</label>
+                            <input type="password" class="form-control" id="password" th:field="*{password}" 
+                                   th:required="${usuario.id == null}">
+                            <div class="form-text" th:if="${usuario.id != null}">
+                                Deja este campo vacío si no deseas cambiar la contraseña
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="rol" class="form-label">Rol</label>
+                            <select class="form-select" id="rol" th:field="*{rol}" required>
+                                <option value="USUARIO">Usuario</option>
+                                <option value="ADMIN">Administrador</option>
+                            </select>
+                        </div>
+                        
+                        <div class="d-flex justify-content-between">
+                            <a th:href="@{/admin/usuarios}" class="btn btn-secondary">Cancelar</a>
+                            <button type="submit" class="btn btn-primary">Guardar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html> 

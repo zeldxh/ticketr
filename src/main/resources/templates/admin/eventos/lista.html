@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="~{fragments/layout :: headBase('Administrar Eventos')}"></th:block>
+    <style>
+        .btn-success {
+            background-color: var(--ctp-mocha-green);
+            border: none;
+            border-radius: 8px;
+            padding: 0.5rem 1.5rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            color: var(--ctp-mocha-base);
+        }
+        
+        .btn-success:hover {
+            background-color: var(--ctp-mocha-teal);
+            transform: translateY(-2px);
+        }
+        
+        .btn-sm {
+            padding: 0.25rem 0.75rem;
+            font-size: 0.875rem;
+            border-radius: 6px;
+            font-weight: 500;
+        }
+        
+        .btn-primary {
+            background-color: var(--ctp-mocha-mauve);
+            border: none;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--ctp-mocha-lavender);
+        }
+        
+        .btn-danger {
+            background-color: var(--ctp-mocha-red);
+            border: none;
+        }
+        
+        .btn-danger:hover {
+            background-color: var(--ctp-mocha-maroon);
+        }
+        
+        .header-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        @media (max-width: 768px) {
+            .header-actions {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+            
+            .table thead th, .table tbody td {
+                padding: 0.75rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav th:replace="~{fragments/navbar :: admin}"></nav>
+
+    <div class="container">
+        <div class="header-actions">
+            <h2 class="app-title">Administrar Eventos</h2>
+            <a th:href="@{/admin/eventos/nuevo}" class="btn btn-success">+ Nuevo Evento</a>
+        </div>
+        
+        <div class="app-table-wrap">
+            <table class="table app-table">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Fecha</th>
+                        <th>Capacidad</th>
+                        <th>Disponibles</th>
+                        <th th:text="${'Precio (' + @currencyHelper.primaryCode() + ')'}">Precio</th>
+                        <th th:text="${'Equivalente (' + @currencyHelper.secondaryCode() + ')'}">Equivalente</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="evento : ${eventos}">
+                        <td th:text="${evento.nombre}"></td>
+                        <td th:text="${evento.fecha}"></td>
+                        <td th:text="${evento.capacidad}"></td>
+                        <td th:text="${evento.boletosDisponibles}"></td>
+                        <td th:text="${@currencyHelper.primarySymbol() + ' ' + #numbers.formatDecimal(evento.precio, 1, 2)}"></td>
+                        <td th:text="${@currencyHelper.secondarySymbol() + ' ' + #numbers.formatDecimal(@currencyHelper.secondaryAmount(evento.precio), 1, 2)}"></td>
+                        <td>
+                            <div class="d-flex gap-2">
+                                <a th:href="@{/admin/eventos/editar/{id}(id=${evento.id})}" class="btn btn-sm btn-primary">Editar</a>
+                                <a th:href="@{/admin/eventos/eliminar/{id}(id=${evento.id})}" class="btn btn-sm btn-danger">Eliminar</a>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <th:block th:replace="~{fragments/layout :: scriptsBase}"></th:block>
+</body>
+</html>

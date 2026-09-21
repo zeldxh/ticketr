@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <th:block th:replace="~{fragments/layout :: headBase('Gestion de Usuarios')}"></th:block>
+    <style>
+        .btn-primary {
+            background-color: var(--ctp-mocha-blue);
+            border-color: var(--ctp-mocha-blue);
+            color: var(--ctp-mocha-base);
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--ctp-mocha-sapphire);
+            border-color: var(--ctp-mocha-sapphire);
+        }
+        
+        .btn-danger {
+            background-color: var(--ctp-mocha-red);
+            border-color: var(--ctp-mocha-red);
+        }
+        
+        .btn-danger:hover {
+            background-color: var(--ctp-mocha-maroon);
+            border-color: var(--ctp-mocha-maroon);
+        }
+        
+        .badge {
+            padding: 0.5em 1em;
+            border-radius: 6px;
+            font-weight: 500;
+        }
+        
+        .badge-admin {
+            background-color: var(--ctp-mocha-mauve);
+            color: white;
+        }
+        
+        .badge-user {
+            background-color: var(--ctp-mocha-green);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <nav th:replace="~{fragments/navbar :: admin}"></nav>
+
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="app-title">Gestion de Usuarios</h2>
+            <a th:href="@{/admin/usuarios/formulario}" class="btn btn-primary">
+                <i class="bi bi-plus-lg"></i> Nuevo Usuario
+            </a>
+        </div>
+
+        <div class="app-table-wrap">
+            <table class="table app-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Email</th>
+                        <th>Rol</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="usuario : ${usuarios}">
+                        <td th:text="${usuario.id}"></td>
+                        <td th:text="${usuario.nombre}"></td>
+                        <td th:text="${usuario.email}"></td>
+                        <td>
+                            <span th:class="${'badge ' + (usuario.rol == T(com.example.sistemaboletos.model.Rol).ADMIN ? 'badge-admin' : 'badge-user')}"
+                                  th:text="${usuario.rol}">
+                            </span>
+                        </td>
+                        <td>
+                            <a th:href="@{/admin/usuarios/formulario(id=${usuario.id})}" 
+                               class="btn btn-sm btn-primary me-2">
+                                Editar
+                            </a>
+                            <a th:href="@{/admin/usuarios/eliminar/{id}(id=${usuario.id})}" 
+                               class="btn btn-sm btn-danger"
+                               onclick="return confirm('¿Estás seguro de que deseas eliminar este usuario?')">
+                                Eliminar
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <th:block th:replace="~{fragments/layout :: scriptsBase}"></th:block>
+</body>
+</html> 

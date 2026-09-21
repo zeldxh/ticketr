@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <th:block th:replace="~{fragments/layout :: headBase('Panel de Administracion')}"></th:block>
+    <style>
+        .admin-card {
+            background-color: var(--ctp-mocha-mantle);
+            border: 1px solid var(--ctp-mocha-surface0);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            height: 100%;
+            overflow: hidden;
+        }
+        
+        .admin-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            border-color: var(--ctp-mocha-blue);
+        }
+        
+        .admin-card .card-body {
+            padding: 2rem;
+        }
+        
+        .admin-card .card-title {
+            color: var(--ctp-mocha-lavender);
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        
+        .admin-card .card-text {
+            color: var(--ctp-mocha-subtext1);
+            margin-bottom: 1.5rem;
+        }
+        
+        .admin-card .btn {
+            background-color: var(--ctp-mocha-surface0);
+            color: var(--ctp-mocha-text);
+            border: none;
+            border-radius: 8px;
+            padding: 0.5rem 1.5rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+        
+        .admin-card .btn:hover {
+            background-color: var(--ctp-mocha-surface1);
+            transform: translateY(-2px);
+        }
+        
+        /* Estilo específico para la tarjeta de Eventos */
+        .card-events {
+            border-left: 4px solid var(--ctp-mocha-mauve);
+        }
+        
+        /* Estilo específico para la tarjeta de Usuarios */
+        .card-users {
+            border-left: 4px solid var(--ctp-mocha-green);
+        }
+        
+        .welcome-text {
+            color: var(--ctp-mocha-subtext1);
+            margin-bottom: 2rem;
+        }
+        
+        .welcome-text span {
+            color: var(--ctp-mocha-peach);
+            font-weight: 500;
+        }
+
+        .card-sales {
+            border-left: 4px solid var(--ctp-mocha-blue);
+        }
+        
+        @media (max-width: 768px) {
+            .admin-card {
+                margin-bottom: 1.5rem;
+            }
+            
+            .admin-card .card-body {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav th:replace="~{fragments/navbar :: admin}"></nav>
+
+    <div class="container text-center">
+        <h2 class="app-title">Panel de Administracion</h2>
+        <p class="welcome-text">Bienvenido, <span sec:authentication="name"></span> <small>(Administrador)</small></p>
+        
+        <div class="row justify-content-center">
+            <div class="col-lg-5 col-md-6 mb-4">
+                <div class="admin-card card-events">
+                    <div class="card-body">
+                        <h5 class="card-title">Eventos</h5>
+                        <p class="card-text">Gestiona todos los eventos del sistema</p>
+                        <a th:href="@{/admin/eventos}" class="btn">Administrar</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-5 col-md-6 mb-4">
+                <div class="admin-card card-users">
+                    <div class="card-body">
+                        <h5 class="card-title">Usuarios</h5>
+                        <p class="card-text">Administra usuarios registrados</p>
+                        <a th:href="@{/admin/usuarios}" class="btn">Administrar</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-5 col-md-6 mb-4">
+                <div class="admin-card card-sales">
+                    <div class="card-body">
+                        <h5 class="card-title">Compras</h5>
+                        <p class="card-text">Consulta quien compro boletos y en que evento</p>
+                        <a th:href="@{/admin/compras}" class="btn">Ver compras</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <th:block th:replace="~{fragments/layout :: scriptsBase}"></th:block>
+</body>
+</html>

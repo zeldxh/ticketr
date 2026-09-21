@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <th:block th:replace="~{fragments/layout :: headBase('Compras Registradas')}"></th:block>
+    <style>
+    </style>
+</head>
+<body>
+    <nav th:replace="~{fragments/navbar :: admin}"></nav>
+
+    <div class="container">
+        <h2 class="app-title">Compras Registradas</h2>
+
+        <div th:if="${#lists.isEmpty(compras)}" class="app-empty-state">
+            No hay compras registradas.
+        </div>
+
+        <div th:if="${!#lists.isEmpty(compras)}" class="app-table-wrap">
+            <table class="table app-table">
+                <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Comprador</th>
+                        <th>Email</th>
+                        <th>Evento</th>
+                        <th>Cantidad</th>
+                        <th th:text="${'Total (' + @currencyHelper.primaryCode() + ')'}">Total</th>
+                        <th th:text="${'Equivalente (' + @currencyHelper.secondaryCode() + ')'}">Equivalente</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="compra : ${compras}">
+                        <td th:text="${#temporals.format(compra.fechaCompra, 'dd/MM/yyyy HH:mm')}"></td>
+                        <td th:text="${compra.usuario.nombre}"></td>
+                        <td th:text="${compra.usuario.email}"></td>
+                        <td th:text="${compra.evento.nombre}"></td>
+                        <td th:text="${compra.cantidad}"></td>
+                        <td th:text="${@currencyHelper.primarySymbol() + ' ' + #numbers.formatDecimal(compra.total, 1, 2)}"></td>
+                        <td th:text="${@currencyHelper.secondarySymbol() + ' ' + #numbers.formatDecimal(@currencyHelper.secondaryAmount(compra.total), 1, 2)}"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <th:block th:replace="~{fragments/layout :: scriptsBase}"></th:block>
+</body>
+</html>
