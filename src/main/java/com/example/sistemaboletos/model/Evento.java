@@ -6,7 +6,7 @@ package com.example.sistemaboletos.model;
 
 /**
  *
- * @author straker
+ * @author zeldxh
  */
 
 import jakarta.persistence.*;

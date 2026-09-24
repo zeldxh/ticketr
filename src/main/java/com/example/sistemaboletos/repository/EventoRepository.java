@@ -6,7 +6,7 @@ package com.example.sistemaboletos.repository;
 
 /**
  *
- * @author straker
+ * @author zeldxh
  */
 
 import com.example.sistemaboletos.model.Evento;
